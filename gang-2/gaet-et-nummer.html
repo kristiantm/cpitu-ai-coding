@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gæt et nummer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .input-group {
+            margin: 20px 0;
+        }
+        input[type="number"] {
+            padding: 10px;
+            font-size: 18px;
+            width: 100px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #feedback {
+            font-size: 24px;
+            margin: 20px 0;
+            min-height: 30px;
+        }
+        #points {
+            font-size: 20px;
+            color: #555;
+        }
+        #reset-btn {
+            background-color: #6c757d;
+        }
+        #reset-btn:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gæt et nummer</h1>
+        <p>Gæt et nummer mellem 1 og 100</p>
+        
+        <div class="input-group">
+            <input type="number" id="guess" min="1" max="100" placeholder="Dit gæt">
+            <button id="submit-btn">Gæt</button>
+        </div>
+        
+        <div id="feedback"></div>
+        <div id="points">Point: 0</div>
+        <button id="reset-btn">Start forfra</button>
+    </div>
+
+    <script>
+        let targetNumber;
+        let attempts = 0;
+
+        function initGame() {
+            targetNumber = Math.floor(Math.random() * 100) + 1;
+            attempts = 0;
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('points').textContent = 'Point: 0';
+            document.getElementById('guess').value = '';
+            document.getElementById('guess').focus();
+        }
+
+        function checkGuess() {
+            const guessInput = document.getElementById('guess');
+            const guess = parseInt(guessInput.value);
+            
+            if (isNaN(guess) || guess < 1 || guess > 100) {
+                document.getElementById('feedback').textContent = 'Indtast et gyldigt nummer mellem 1 og 100';
+                return;
+            }
+
+            attempts++;
+            const feedbackElement = document.getElementById('feedback');
+            const pointsElement = document.getElementById('points');
+
+            if (guess === targetNumber) {
+                feedbackElement.textContent = 'Rigtigt!';
+                pointsElement.textContent = `Point: ${attempts}`;
+                setTimeout(() => {
+                    if (confirm(`Tillykke! Du brugte ${attempts} forsøg. Vil du spille igen?`)) {
+                        initGame();
+                    }
+                }, 100);
+            } else if (guess < targetNumber) {
+                feedbackElement.textContent = 'Højere!';
+                pointsElement.textContent = `Point: ${attempts}`;
+            } else {
+                feedbackElement.textContent = 'Lavere!';
+                pointsElement.textContent = `Point: ${attempts}`;
+            }
+
+            guessInput.value = '';
+            guessInput.focus();
+        }
+
+        document.getElementById('submit-btn').addEventListener('click', checkGuess);
+        document.getElementById('reset-btn').addEventListener('click', initGame);
+        document.getElementById('guess').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkGuess();
+            }
+        });
+
+        // Start spillet
+        initGame();
+    </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+/* Her bestemmer du, hvordan spillet ser ud: farver, størrelser og stil. */
+
+body {
+  font-family: sans-serif;
+  text-align: center;
+  background: #222;
+  color: #fff;
+}
+
+canvas {
+  background: #000;
+  border: 4px solid #f5a200;
+}
